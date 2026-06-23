@@ -1,1 +1,4 @@
-# Outputs will be added as resources are created
+output "vpc_id" {
+  description = "VPC ID"
+  value       = aws_vpc.vpc.id
+}
