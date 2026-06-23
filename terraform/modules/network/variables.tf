@@ -13,8 +13,23 @@ variable "vpc_cidr" {
   type        = string
 }
 
-variable "public_subnet_cidr" {
+variable "public_subnet_a_cidr" {
   description = "CIDR block for public subnet A"
+  type        = string
+}
+
+variable "public_subnet_b_cidr" {
+  description = "CIDR block for public subnet B"
+  type        = string
+}
+
+variable "private_subnet_a_cidr" {
+  description = "CIDR block for public subnet A"
+  type        = string
+}
+
+variable "private_subnet_b_cidr" {
+  description = "CIDR block for public subnet B"
   type        = string
 }
 
@@ -23,10 +38,7 @@ variable "availability_zone" {
   type        = string
 }
 
-variable "public_subnet_b_cidr" {
-  description = "CIDR block for public subnet B"
-  type        = string
-}
+
 
 variable "availability_zone_b" {
   description = "Availability Zone for subnet B"

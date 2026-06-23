@@ -14,7 +14,7 @@ resource "aws_vpc" "vpc" {
 
 resource "aws_subnet" "public_a" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = var.public_subnet_cidr
+  cidr_block        = var.public_subnet_a_cidr
   availability_zone = var.availability_zone
   map_public_ip_on_launch = true
 
@@ -75,4 +75,32 @@ resource "aws_subnet" "public_b" {
 resource "aws_route_table_association" "public_b" {
   subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.public.id
+}
+
+resource "aws_subnet" "private_a" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.private_subnet_a_cidr
+  availability_zone = var.availability_zone
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-private-a"
+    Project     = var.project_name
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}
+
+resource "aws_subnet" "private_b" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = var.private_subnet_b_cidr
+  availability_zone = var.availability_zone
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-private-b"
+    Project     = var.project_name
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
 }
