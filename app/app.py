@@ -29,7 +29,15 @@ def home():
 def upload():
     file = request.files["image"]
 
-    return f"Received file: {file.filename}"
+    bucket = os.environ["S3_BUCKET_NAME"]
+
+    s3.upload_fileobj(
+        file,
+        bucket,
+        file.filename
+    )
+
+    return f"Uploaded {file.filename} to {bucket}"
 
 
 if __name__ == "__main__":
