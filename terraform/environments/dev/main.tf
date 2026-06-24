@@ -17,38 +17,38 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 module "network" {
   source = "../../modules/network"
 
-  project_name = "clouddarkroom"
-  environment  = "dev"
+  project_name = var.project_name
+  environment  = var.environment
 
-  vpc_cidr = "10.0.0.0/16"
+  vpc_cidr = var.vpc_cidr
 
-  public_subnet_a_cidr = "10.0.1.0/24"
-  availability_zone_a  = "us-east-1a"
+  public_subnet_a_cidr = var.public_subnet_a_cidr
+  availability_zone_a  = var.availability_zone_a
 
-  public_subnet_b_cidr = "10.0.2.0/24"
-  availability_zone_b  = "us-east-1b"
+  public_subnet_b_cidr = var.public_subnet_b_cidr
+  availability_zone_b  = var.availability_zone_b
 
-  private_subnet_a_cidr = "10.0.11.0/24"
-  private_subnet_b_cidr = "10.0.12.0/24"
+  private_subnet_a_cidr = var.private_subnet_a_cidr
+  private_subnet_b_cidr = var.private_subnet_b_cidr
 
 }
 
 module "ecs" {
   source = "../../modules/ecs"
 
-  project_name      = "clouddarkroom"
-  environment       = "dev"
+  project_name      = var.project_name
+  environment       = var.environment
   container_image   = "${module.ecr.repository_url}:latest"
   container_port    = 5000
   subnet_ids        = module.network.public_subnet_ids
   security_group_id = module.network.ecs_security_group_id
-  aws_region        = "us-east-1"
+  aws_region        = var.aws_region
 
   s3_bucket_name = module.s3.bucket_name
 }
@@ -56,23 +56,32 @@ module "ecs" {
 module "ecr" {
   source = "../../modules/ecr"
 
-  project_name = "clouddarkroom"
-  environment  = "dev"
+  project_name = var.project_name
+  environment  = var.environment
 }
 
 module "github_oidc" {
   source = "../../modules/github_oidc"
 
-  project_name = "clouddarkroom"
-  environment  = "dev"
+  project_name = var.project_name
+  environment  = var.environment
 
-  github_org  = "chrisjbrinson"
-  github_repo = "CloudDarkroom"
+  github_org  = var.github_org
+  github_repo = var.github_repo
 }
 
 module "s3" {
   source = "../../modules/s3"
 
-  project_name = "clouddarkroom"
-  environment  = "dev"
+  project_name = var.project_name
+  environment  = var.environment
+  bucket_suffix = "uploads"
+}
+
+module "processed_bucket" {
+  source = "../../modules/s3"
+
+  project_name = var.project_name
+  environment  = var.environment
+  bucket_suffix = "processed"
 }

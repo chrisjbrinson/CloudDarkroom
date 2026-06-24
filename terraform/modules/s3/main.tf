@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "uploads" {
-  bucket = "${var.project_name}-${var.environment}-uploads"
+  bucket = "${var.project_name}-${var.environment}-${var.bucket_suffix}"
 
   tags = {
-    Name        = "${var.project_name}-${var.environment}-uploads"
+    Name = "${var.project_name}-${var.environment}-${var.bucket_suffix}"
     Project     = var.project_name
     Environment = var.environment
     ManagedBy   = "Terraform"
