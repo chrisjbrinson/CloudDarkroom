@@ -1,6 +1,6 @@
 # CloudDarkroom
 
-CloudDarkroom is a hands-on AWS project built to deepen my experience with cloud infrastructure, containerization, Infrastructure as Code, and CI/CD automation.
+CloudDarkroom is an AWS project built to deepen my experience with cloud infrastructure, containerization, Infrastructure as Code, and CI/CD automation.
 The end goal is to upload an image, adjust resolution, store metadata in a PostgreSQL DB, and automatically upload to my different artist sites(instagram, portfolio, etc.)
 
 ## Current Features
