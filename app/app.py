@@ -10,7 +10,7 @@ app.logger.info("CloudDarkroom is starting")
 
 @app.route("/")
 def home():
-    return "CloudDarkroom is running"
+    return "CloudDarkroom is running v2"
 
 
 if __name__ == "__main__":
