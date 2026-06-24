@@ -3,6 +3,10 @@
 CloudDarkroom is an AWS project built to deepen my experience with cloud infrastructure, containerization, Infrastructure as Code, and CI/CD automation.
 The end goal is to upload an image, adjust resolution, store metadata in a PostgreSQL DB, and automatically upload to my different artist sites(instagram, portfolio, etc.)
 
+## Status
+
+🚧 Active development project focused on modern cloud and platform engineering practices.
+
 ## Completed
 
 * Terraform-managed AWS infrastructure
@@ -39,9 +43,7 @@ The end goal is to upload an image, adjust resolution, store metadata in a Postg
 * CloudFront CDN
 * Monitoring and observability
 
-## Status
 
-🚧 Active development project focused on modern cloud and platform engineering practices.
 
 
 
