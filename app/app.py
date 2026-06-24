@@ -1,10 +1,12 @@
 from flask import Flask, request
 import logging
 import os
+import boto3
 
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+s3 = boto3.client("s3")
 
 app.logger.info("CloudDarkroom is starting")
 
