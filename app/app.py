@@ -2,6 +2,7 @@ from flask import Flask, request
 import logging
 import os
 import boto3
+import uuid
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,14 +31,14 @@ def upload():
     file = request.files["image"]
 
     bucket = os.environ["S3_BUCKET_NAME"]
-
+    key = f"{uuid.uuid4()}-{file.filename}"
     s3.upload_fileobj(
         file,
         bucket,
-        file.filename
+        key
     )
 
-    return f"Uploaded {file.filename} to {bucket}"
+    return f"Uploaded {key} to {bucket}"
 
 
 if __name__ == "__main__":
