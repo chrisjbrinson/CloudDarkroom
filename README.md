@@ -1,62 +1,45 @@
 # CloudDarkroom
 
 CloudDarkroom is a hands-on AWS project built to deepen my experience with cloud infrastructure, containerization, Infrastructure as Code, and CI/CD automation.
-The end goal is to upload an image, resize, store metadata in a PostgreSQL DB, and automatically upload to my different artist sites(instagram, portfolio, etc.)
+The end goal is to upload an image, adjust resolution, store metadata in a PostgreSQL DB, and automatically upload to my different artist sites(instagram, portfolio, etc.)
 
-## What It Does
+## Current Features
 
-* Deploys a containerized Python Flask application
-* Provisions AWS infrastructure using Terraform
-* Stores Terraform state remotely in S3
-* Builds and publishes Docker images to Amazon ECR
-* Uses GitHub Actions with OIDC authentication to AWS
-* Uses Amazon ECS as the container orchestration platform
+* Terraform-managed AWS infrastructure
+* Custom VPC with public and private subnets
+* Amazon ECS cluster
+* Amazon ECR repository
+* Dockerized Python Flask application
+* Remote Terraform state stored in S3
+* GitHub Actions CI/CD pipeline
+* OIDC authentication between GitHub and AWS
+* Automated container image builds and pushes to ECR
 
-## Infrastructure
+## Technology Stack
 
-Current AWS resources include:
+* AWS
+* Terraform
+* Docker
+* Amazon ECS
+* Amazon ECR
+* GitHub Actions
+* Python
+* Flask
 
-* VPC
-* 2 Public Subnets
-* 2 Private Subnets
-* Internet Gateway
-* Route Tables
-* ECS Cluster
-* ECR Repository
-* GitHub OIDC Provider
-* IAM Roles and Policies
+## Next Steps
 
-## CI/CD
-
-A GitHub Actions workflow automatically:
-
-1. Triggers on changes to the application
-2. Authenticates to AWS using OIDC
-3. Builds a Docker image
-4. Pushes the image to Amazon ECR
-
-No long-lived AWS credentials are stored in GitHub.
-
-## Current Status
-
-### Completed
-
-* Terraform module structure
-* Remote Terraform state
-* AWS networking
-* ECS cluster
-* ECR repository
-* Dockerized application
-* GitHub Actions pipeline
-* OIDC authentication to AWS
-* Automated image publishing to ECR
-
-### Next Steps
-
-* ECS Task Definition
-* ECS Service
+* ECS service and task definitions
 * Application Load Balancer
-* Automated ECS deployments
-* HTTPS and custom domain
+* PostgreSQL database for image metadata
+* Image uploads to S3
+* Lambda-based image processing and thumbnail generation
+* User authentication and galleries
+* CloudFront CDN
+* Monitoring and observability
+
+## Status
+
+🚧 Active development project focused on modern cloud and platform engineering practices.
+
 
 
