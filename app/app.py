@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import logging
 import os
 
@@ -12,7 +12,22 @@ app.logger.info("CloudDarkroom is starting")
 @app.route("/")
 def home():
     bucket = os.environ.get("S3_BUCKET_NAME", "not set")
-    return f"CloudDarkroom is running <br>Bucket: {bucket}"
+
+    return f"""
+    <h1>CloudDarkroom</h1>
+    <p>Bucket: {bucket}</p>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <button type="submit">Upload</button>
+    </form>
+    """
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    file = request.files["image"]
+
+    return f"Received file: {file.filename}"
 
 
 if __name__ == "__main__":
