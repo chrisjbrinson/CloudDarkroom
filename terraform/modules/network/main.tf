@@ -125,3 +125,32 @@ resource "aws_route_table_association" "private_b" {
   subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
+
+resource "aws_security_group" "ecs" {
+  name        = "${var.project_name}-${var.environment}-ecs"
+  description = "Security group for ECS tasks"
+  vpc_id      = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 5000
+    to_port     = 5000
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+    //Testing access from home
+    //cidr_blocks = ["174.29.23.86/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "${var.project_name}-${var.environment}-ecs"
+    Project     = var.project_name
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}

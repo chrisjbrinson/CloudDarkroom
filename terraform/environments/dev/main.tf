@@ -44,6 +44,10 @@ module "ecs" {
 
   project_name = "clouddarkroom"
   environment  = "dev"
+  container_image = "${module.ecr.repository_url}:latest"
+  container_port = 5000
+  subnet_ids = module.network.public_subnet_ids
+  security_group_id = module.network.ecs_security_group_id
 }
 
 module "ecr" {
