@@ -135,7 +135,9 @@ resource "aws_security_group" "ecs" {
     from_port   = 5000
     to_port     = 5000
     protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
+    //cidr_blocks = [var.vpc_cidr]
+    cidr_blocks = ["174.29.23.86/32", var.vpc_cidr]
+
   }
 
   egress {

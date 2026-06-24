@@ -1,5 +1,6 @@
 from flask import Flask
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 
@@ -10,7 +11,8 @@ app.logger.info("CloudDarkroom is starting")
 
 @app.route("/")
 def home():
-    return "CloudDarkroom is running v2"
+    bucket = os.environ.get("S3_BUCKET_NAME", "not set")
+    return f"CloudDarkroom is running <br>Bucket: {bucket}"
 
 
 if __name__ == "__main__":

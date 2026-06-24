@@ -49,6 +49,8 @@ module "ecs" {
   subnet_ids        = module.network.public_subnet_ids
   security_group_id = module.network.ecs_security_group_id
   aws_region        = "us-east-1"
+
+  s3_bucket_name = module.s3.bucket_name
 }
 
 module "ecr" {
@@ -66,4 +68,11 @@ module "github_oidc" {
 
   github_org  = "chrisjbrinson"
   github_repo = "CloudDarkroom"
+}
+
+module "s3" {
+  source = "../../modules/s3"
+
+  project_name = "clouddarkroom"
+  environment  = "dev"
 }
