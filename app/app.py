@@ -30,6 +30,8 @@ def home():
 def upload():
     file = request.files["image"]
 
+    app.logger.info(f"Starting upload: {file.filename}")
+
     bucket = os.environ["S3_BUCKET_NAME"]
     key = f"{uuid.uuid4()}-{file.filename}"
     s3.upload_fileobj(
@@ -37,7 +39,7 @@ def upload():
         bucket,
         key
     )
-
+    app.logger.info(f"Finished upload: {file.filename}")
     return f"Uploaded {key} to {bucket}"
 
 
