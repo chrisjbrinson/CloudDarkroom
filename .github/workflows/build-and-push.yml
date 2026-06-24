@@ -19,7 +19,7 @@ jobs:
     env:
       ECR_REPOSITORY: clouddarkroom-dev
       AWS_REGION: us-east-1
-      
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -44,3 +44,10 @@ jobs:
 
           docker push \
             875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+          
+      - name: Force ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster clouddarkroom-dev \
+            --service clouddarkroom-dev \
+            --force-new-deployment
