@@ -33,7 +33,7 @@ variable "private_subnet_b_cidr" {
   type        = string
 }
 
-variable "availability_zone" {
+variable "availability_zone_a" {
   description = "Availability Zone for public subnet A"
   type        = string
 }
