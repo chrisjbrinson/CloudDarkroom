@@ -38,3 +38,17 @@ module "network" {
   private_subnet_b_cidr = "10.0.12.0/24"
 
 }
+
+module "ecs" {
+  source = "../../modules/ecs"
+
+  project_name = "clouddarkroom"
+  environment  = "dev"
+}
+
+module "ecr" {
+  source = "../../modules/ecr"
+
+  project_name = "clouddarkroom"
+  environment  = "dev"
+}

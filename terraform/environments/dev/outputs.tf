@@ -7,3 +7,8 @@ output "public_subnet_ids" {
   description = "Public subnet IDs from network module"
   value       = module.network.public_subnet_ids
 }
+
+output "ecr_repository_url" {
+  description = "ECR repository URL"
+  value       = module.ecr.repository_url
+}
