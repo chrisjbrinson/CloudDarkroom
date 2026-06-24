@@ -52,3 +52,13 @@ module "ecr" {
   project_name = "clouddarkroom"
   environment  = "dev"
 }
+
+module "github_oidc" {
+  source = "../../modules/github_oidc"
+
+  project_name = "clouddarkroom"
+  environment  = "dev"
+
+  github_org  = "chrisjbrinson"
+  github_repo = "CloudDarkroom"
+}

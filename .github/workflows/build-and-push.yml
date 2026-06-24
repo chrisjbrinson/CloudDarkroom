@@ -1,0 +1,46 @@
+name: Build and Push
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - '.github/workflows/build-and-push.yml'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ECR_REPOSITORY: clouddarkroom-dev
+      AWS_REGION: us-east-1
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::875852488827:role/clouddarkroom-dev-github-actions
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        run: |
+          docker build -t ${{ env.ECR_REPOSITORY }}:latest ./app
+
+          docker tag \
+            ${{ env.ECR_REPOSITORY }}:latest \
+            875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+
+          docker push \
+            875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
