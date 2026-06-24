@@ -27,3 +27,8 @@ variable "security_group_id" {
   description = "Security group for ECS service"
   type        = string
 }
+
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}

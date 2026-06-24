@@ -48,6 +48,7 @@ module "ecs" {
   container_port = 5000
   subnet_ids = module.network.public_subnet_ids
   security_group_id = module.network.ecs_security_group_id
+  aws_region = "us-east-1"
 }
 
 module "ecr" {

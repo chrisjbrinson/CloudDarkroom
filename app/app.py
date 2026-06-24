@@ -1,6 +1,11 @@
 from flask import Flask
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+
+app.logger.info("CloudDarkroom is starting")
 
 
 @app.route("/")
