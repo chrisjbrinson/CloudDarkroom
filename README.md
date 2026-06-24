@@ -14,6 +14,7 @@ The end goal is to upload an image, adjust resolution, store metadata in a Postg
 * GitHub Actions CI/CD pipeline
 * OIDC authentication between GitHub and AWS
 * Automated container image builds and pushes to ECR
+* ECS service and task definitions
 
 ## Technology Stack
 
@@ -28,7 +29,7 @@ The end goal is to upload an image, adjust resolution, store metadata in a Postg
 
 ## Next Steps
 
-* ECS service and task definitions
+* ~~ECS service and task definitions~~
 * Application Load Balancer
 * PostgreSQL database for image metadata
 * Image uploads to S3
