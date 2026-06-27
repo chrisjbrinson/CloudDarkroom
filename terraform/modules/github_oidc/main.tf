@@ -4,7 +4,6 @@ resource "aws_iam_openid_connect_provider" "github" {
   client_id_list = [
     "sts.amazonaws.com"
   ]
-
 }
 
 data "aws_iam_policy_document" "github_assume_role" {
@@ -62,6 +61,7 @@ data "aws_iam_policy_document" "github_actions" {
 
     resources = ["*"]
   }
+
   statement {
     actions = [
       "ecs:UpdateService",
@@ -69,6 +69,17 @@ data "aws_iam_policy_document" "github_actions" {
     ]
 
     resources = ["*"]
+  }
+
+  statement {
+    actions = [
+      "lambda:GetFunction",
+      "lambda:UpdateFunctionCode"
+    ]
+
+    resources = [
+      "arn:aws:lambda:us-east-1:875852488827:function:${var.project_name}-${var.environment}"
+    ]
   }
 }
 
