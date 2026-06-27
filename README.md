@@ -20,6 +20,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * Automated container image builds and pushes to ECR
 * ECS service and task definitions
 * Image upload to S3
+* Lambda based image processing
 
 ## Technology Stack
 
@@ -38,7 +39,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * Application Load Balancer (not really necessary, but might implement for practice)
 * PostgreSQL database for image metadata
 * ~~Image uploads to S3~~
-* Lambda-based image processing and thumbnail generation
+* ~~Lambda-based image processing~~
 * User authentication and galleries
 * CloudFront CDN
 * Monitoring and observability
