@@ -18,3 +18,7 @@ output "github_actions_role_arn" {
   value       = module.github_oidc.role_arn
 }
 
+output "rds_endpoint" {
+  description = "Endpoint for PostgreSQL RDS"
+  value = module.rds.endpoint
+}

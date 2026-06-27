@@ -45,3 +45,12 @@ variable "availability_zone_a" {
 variable "availability_zone_b" {
   type = string
 }
+
+variable "db_username" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+  sensitive = true
+}
