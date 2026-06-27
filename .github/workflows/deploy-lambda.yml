@@ -46,7 +46,7 @@ jobs:
             --upgrade pip
 
           python3 -m pip install \
-            --platform manylinux_2_34_x86_64 \
+            --platform manylinux2014_x86_64 \
             --implementation cp \
             --python-version 3.13 \
             --only-binary=:all: \
