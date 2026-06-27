@@ -114,6 +114,22 @@ resource "aws_ecs_task_definition" "this" {
         {
             name = "PROCESSED_BUCKET_NAME"
             value = var.processed_bucket_name
+        },
+        {
+          name = "DB_HOST"
+          value = var.db_host
+        },
+        {
+          name = "DB_NAME"
+          value = var.db_name
+        },
+        {
+          name = "DB_USER"
+          value = var.db_user
+        },
+        {
+          name = "DB_PASSWORD"
+          value = var.db_password
         }
       ]
 

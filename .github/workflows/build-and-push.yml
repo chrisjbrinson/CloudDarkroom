@@ -36,8 +36,7 @@ jobs:
 
       - name: Build and push image
         run: |
-          docker build -t ${{ env.ECR_REPOSITORY }}:latest ./app
-
+          docker build -f app/Dockerfile -t ${{ env.ECR_REPOSITORY }}:latest .
           docker tag \
             ${{ env.ECR_REPOSITORY }}:latest \
             875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest

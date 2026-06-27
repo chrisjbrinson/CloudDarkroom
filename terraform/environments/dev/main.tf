@@ -30,6 +30,11 @@ module "ecs" {
 
   upload_bucket_name = module.s3.bucket_name
   processed_bucket_name = module.processed_bucket.bucket_name
+
+  db_host = module.rds.address
+  db_name = module.rds.database_name
+  db_user = var.db_username
+  db_password = var.db_password
 }
 
 module "ecr" {
