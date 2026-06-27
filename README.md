@@ -21,6 +21,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * ECS service and task definitions
 * Image upload to S3
 * Lambda based image processing
+* PostgreSQL database for image metadata
 
 ## Technology Stack
 
@@ -37,7 +38,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 
 * ~~ECS service and task definitions~~
 * Application Load Balancer (not really necessary, but might implement for practice)
-* PostgreSQL database for image metadata
+* ~~PostgreSQL database for image metadata~~
 * ~~Image uploads to S3~~
 * ~~Lambda-based image processing~~
 * User authentication and galleries
