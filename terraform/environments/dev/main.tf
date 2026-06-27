@@ -67,6 +67,14 @@ module "processed_bucket" {
   bucket_suffix = "processed"
 }
 
+module "artifacts_bucket" {
+  source = "../../modules/s3"
+
+  project_name  = var.project_name
+  environment   = var.environment
+  bucket_suffix = "artifacts"
+}
+
 module "lambda" {
   source = "../../modules/lambda"
 
