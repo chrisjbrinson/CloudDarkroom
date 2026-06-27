@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "s3_uploads" {
           "s3:PutObject"
         ]
 
-        Resource = "arn:aws:s3:::${var.s3_bucket_name}/*"
+        Resource = "arn:aws:s3:::${var.upload_bucket_name}/*"
       }
     ]
   })
@@ -96,8 +96,12 @@ resource "aws_ecs_task_definition" "this" {
 
       environment = [
         {
-            name = "S3_BUCKET_NAME"
-            value = var.s3_bucket_name
+            name = "UPLOAD_BUCKET_NAME"
+            value = var.upload_bucket_name
+        },
+        {
+            name = "PROCESSED_BUCKET_NAME"
+            value = var.processed_bucket_name
         }
       ]
 

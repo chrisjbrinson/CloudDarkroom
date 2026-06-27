@@ -50,7 +50,8 @@ module "ecs" {
   security_group_id = module.network.ecs_security_group_id
   aws_region        = var.aws_region
 
-  s3_bucket_name = module.s3.bucket_name
+  upload_bucket_name = module.s3.bucket_name
+  processed_bucket_name = module.processed_bucket.bucket_name
 }
 
 module "ecr" {

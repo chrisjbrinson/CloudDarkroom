@@ -33,6 +33,12 @@ variable "aws_region" {
   type        = string
 }
 
-variable "s3_bucket_name" {
+variable "upload_bucket_name" {
+  description = "Name of the uploads s3 bucket"
+  type = string
+}
+
+variable "processed_bucket_name" {
+  description = "Name of the processed s3 bucket"
   type = string
 }

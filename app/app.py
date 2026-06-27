@@ -14,11 +14,13 @@ app.logger.info("CloudDarkroom is starting")
 
 @app.route("/")
 def home():
-    bucket = os.environ.get("S3_BUCKET_NAME", "not set")
+    upload_bucket = os.environ.get("UPLOAD_BUCKET_NAME", "not set")
+    processed_bucket = os.environ.get("PROCESSED_BUCKET_NAME", "not set")
 
     return f"""
     <h1>CloudDarkroom</h1>
-    <p>Bucket: {bucket}</p>
+    <p><strong>Upload Bucket:</strong> {upload_bucket}</p>
+    <p><strong>Processed Bucket:</strong> {processed_bucket}</p>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="image">
@@ -32,7 +34,7 @@ def upload():
 
     app.logger.info(f"Starting upload: {file.filename}")
 
-    bucket = os.environ["S3_BUCKET_NAME"]
+    bucket = os.environ["UPLOAD_BUCKET_NAME"]
     key = f"{uuid.uuid4()}-{file.filename}"
     s3.upload_fileobj(
         file,
