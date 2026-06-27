@@ -30,21 +30,33 @@ jobs:
           role-to-assume: arn:aws:iam::875852488827:role/clouddarkroom-dev-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
       - name: Build Lambda package
         run: |
-          docker run --rm \
-            --entrypoint /bin/bash \
-            -v ${{ github.workspace }}/lambda:/workspace \
-            public.ecr.aws/lambda/python:3.13 \
-            -c "
-              cd /workspace && \
-              rm -rf package package.zip && \
-              mkdir package && \
-              python -m pip install -r requirements.txt -t package && \
-              cp handler.py package/ && \
-              cd package && \
-              zip -r ../package.zip .
-            "
+          cd lambda
+
+          rm -rf package package.zip
+          mkdir package
+
+          python3 -m pip install \
+            --upgrade pip
+
+          python3 -m pip install \
+            --platform manylinux_2_34_x86_64 \
+            --implementation cp \
+            --python-version 3.13 \
+            --only-binary=:all: \
+            -r requirements.txt \
+            -t package
+
+          cp handler.py package/
+
+          cd package
+          zip -r ../package.zip .
 
       - name: Update Lambda function
         run: |
