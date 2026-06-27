@@ -33,9 +33,11 @@ jobs:
       - name: Build Lambda package
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}/lambda:/var/task \
+            --entrypoint /bin/bash \
+            -v ${{ github.workspace }}/lambda:/workspace \
             public.ecr.aws/lambda/python:3.13 \
-            /bin/sh -c "
+            -c "
+              cd /workspace && \
               rm -rf package package.zip && \
               mkdir package && \
               python -m pip install -r requirements.txt -t package && \
