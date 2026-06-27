@@ -71,6 +71,18 @@ resource "aws_iam_role_policy" "s3_uploads" {
         ]
 
         Resource = "arn:aws:s3:::${var.upload_bucket_name}/*"
+      },
+      {
+        Effect = "Allow"
+
+        Action = [
+          "ssmmessages:CreateControlChannel",
+          "ssmmessages:CreateDataChannel",
+          "ssmmessages:OpenControlChannel",
+          "ssmmessages:OpenDataChannel"
+        ]
+
+        Resource = "*"
       }
     ]
   })
@@ -131,6 +143,7 @@ resource "aws_ecs_service" "this" {
 
   desired_count = 1
   launch_type   = "FARGATE"
+  enable_execute_command = true
 
   network_configuration {
     subnets = var.subnet_ids
