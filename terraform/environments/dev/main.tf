@@ -1,25 +1,3 @@
-terraform {
-  required_version = ">= 1.10"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-
-  backend "s3" {
-    bucket       = "clouddarkroom-brinson-tfstate"
-    key          = "dev/terraform.tfstate"
-    region       = "us-east-1"
-    use_lockfile = true
-  }
-}
-
-provider "aws" {
-  region = var.aws_region
-}
-
 module "network" {
   source = "../../modules/network"
 
@@ -77,6 +55,8 @@ module "s3" {
   project_name = var.project_name
   environment  = var.environment
   bucket_suffix = "uploads"
+  lambda_function_arn = module.lambda.function_arn
+  lambda_function_name = module.lambda.function_name
 }
 
 module "processed_bucket" {
@@ -85,4 +65,13 @@ module "processed_bucket" {
   project_name = var.project_name
   environment  = var.environment
   bucket_suffix = "processed"
+}
+
+module "lambda" {
+  source = "../../modules/lambda"
+
+  project_name = var.project_name
+  environment  = var.environment
+  upload_bucket_name    = module.s3.bucket_name
+  processed_bucket_name = module.processed_bucket.bucket_name
 }
