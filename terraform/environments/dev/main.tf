@@ -85,8 +85,17 @@ module "lambda" {
 
   project_name = var.project_name
   environment  = var.environment
+
   upload_bucket_name    = module.s3.bucket_name
   processed_bucket_name = module.processed_bucket.bucket_name
+
+  db_host     = module.rds.address
+  db_name     = module.rds.database_name
+  db_user     = var.db_username
+  db_password = var.db_password
+
+  subnet_ids        = module.network.private_subnet_ids
+  security_group_id = module.network.ecs_security_group_id
 }
 
 module "rds" {

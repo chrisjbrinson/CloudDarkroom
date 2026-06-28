@@ -4,6 +4,7 @@ from io import BytesIO
 
 import boto3
 from PIL import Image
+
 from common.db import get_connection
 
 logger = logging.getLogger()
@@ -14,6 +15,7 @@ s3 = boto3.client("s3")
 
 def lambda_handler(event, context):
     logger.info("Lambda deployment test!!!")
+
     upload_bucket = os.environ["UPLOAD_BUCKET_NAME"]
     processed_bucket = os.environ["PROCESSED_BUCKET_NAME"]
 
@@ -45,6 +47,8 @@ def lambda_handler(event, context):
 
     logger.info(f"Resized image: {image.size}")
 
+    width, height = image.size
+
     # Convert to grayscale
     image = image.convert("L")
 
@@ -71,6 +75,40 @@ def lambda_handler(event, context):
     )
 
     logger.info(f"Uploaded processed image: {processed_key}")
+
+    # Store metadata in PostgreSQL
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                INSERT INTO images (
+                    original_filename,
+                    original_bucket,
+                    original_key,
+                    processed_bucket,
+                    processed_key,
+                    status,
+                    width,
+                    height,
+                    processed_at
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                """,
+                (
+                    os.path.basename(key),
+                    source_bucket,
+                    key,
+                    processed_bucket,
+                    processed_key,
+                    "processed",
+                    width,
+                    height,
+                ),
+            )
+
+        conn.commit()
+
+    logger.info("Inserted image metadata into PostgreSQL.")
 
     return {
         "statusCode": 200,

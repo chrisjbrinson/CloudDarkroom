@@ -54,6 +54,12 @@ resource "aws_iam_role_policy_attachment" "basic_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
+resource "aws_iam_role_policy_attachment" "vpc_access" {
+  role = aws_iam_role.lambda.name
+
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
 
 resource "aws_lambda_function" "this" {
   function_name = "${var.project_name}-${var.environment}"
@@ -65,7 +71,18 @@ resource "aws_lambda_function" "this" {
      variables = {
        UPLOAD_BUCKET_NAME    = var.upload_bucket_name
        PROCESSED_BUCKET_NAME = var.processed_bucket_name
+       DB_HOST = var.db_host
+       DB_NAME = var.db_name
+       DB_USER = var.db_user
+       DB_PASSWORD = var.db_password
+
     }
+  }
+  vpc_config {
+    subnet_ids = var.subnet_ids
+    security_group_ids = [
+        var.security_group_id
+    ]
   }
 
   filename         = "${path.root}/../../../lambda/package.zip"
