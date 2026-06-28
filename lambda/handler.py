@@ -4,6 +4,7 @@ from io import BytesIO
 
 import boto3
 from PIL import Image
+from common.db import get_connection
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)

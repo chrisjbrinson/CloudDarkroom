@@ -13,6 +13,7 @@ mkdir package
 python -m pip install -r requirements.txt -t package
 
 cp handler.py package/
+cp -r ../common package/common
 
 cd package
 zip -r ../package.zip .

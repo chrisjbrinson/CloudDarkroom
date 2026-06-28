@@ -8,6 +8,11 @@ output "public_subnet_ids" {
   value       = module.network.public_subnet_ids
 }
 
+output "private_subnet_ids" {
+  description = "Private subnet IDs from network module"
+  value       = module.network.private_subnet_ids
+}
+
 output "ecr_repository_url" {
   description = "ECR repository URL"
   value       = module.ecr.repository_url
@@ -21,4 +26,9 @@ output "github_actions_role_arn" {
 output "rds_endpoint" {
   description = "Endpoint for PostgreSQL RDS"
   value = module.rds.endpoint
+}
+
+output "ecs_security_group_id" {
+  description = "ECS Security Group ID"
+  value = module.network.ecs_security_group_id
 }

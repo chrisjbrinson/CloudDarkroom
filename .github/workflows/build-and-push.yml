@@ -5,8 +5,10 @@ on:
     branches:
       - main
     paths:
-      - 'app/**'
-      - '.github/workflows/build-and-push.yml'
+      - "app/**"
+      - "common/**"
+      - "scripts/**"
+      - ".github/workflows/build-and-push.yml"
 
 permissions:
   id-token: write
@@ -17,8 +19,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ECR_REPOSITORY: clouddarkroom-dev
       AWS_REGION: us-east-1
+      ECR_REPOSITORY: clouddarkroom-dev
 
     steps:
       - name: Checkout code
@@ -28,25 +30,86 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::875852488827:role/clouddarkroom-dev-github-actions
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push image
         run: |
-          docker build -f app/Dockerfile -t ${{ env.ECR_REPOSITORY }}:latest .
+          docker build \
+            -f app/Dockerfile \
+            -t ${{ env.ECR_REPOSITORY }}:latest .
+
           docker tag \
             ${{ env.ECR_REPOSITORY }}:latest \
             875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
 
           docker push \
             875852488827.dkr.ecr.us-east-1.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
-          
-      - name: Force ECS deployment
+
+      - name: Deploy ECS service
         run: |
           aws ecs update-service \
-            --cluster clouddarkroom-dev \
-            --service clouddarkroom-dev \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --service ${{ vars.ECS_SERVICE }} \
             --force-new-deployment
+
+      - name: Wait for ECS deployment
+        run: |
+          aws ecs wait services-stable \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --services ${{ vars.ECS_SERVICE }}
+
+      - name: Get latest task definition
+        id: taskdef
+        run: |
+          TASK_DEF=$(aws ecs describe-services \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --services ${{ vars.ECS_SERVICE }} \
+            --query "services[0].taskDefinition" \
+            --output text)
+
+          echo "task_definition=$TASK_DEF" >> $GITHUB_OUTPUT
+
+      - name: Run schema task
+        id: schema
+        run: |
+          TASK_ARN=$(aws ecs run-task \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --launch-type FARGATE \
+            --task-definition "${{ steps.taskdef.outputs.task_definition }}" \
+            --network-configuration "awsvpcConfiguration={subnets=[${{ vars.ECS_SUBNETS }}],securityGroups=[${{ vars.ECS_SECURITY_GROUP }}],assignPublicIp=DISABLED}" \
+            --overrides '{
+              "containerOverrides": [
+                {
+                  "name": "clouddarkroom-dev",
+                  "command": ["python", "scripts/create_schema.py"]
+                }
+              ]
+            }' \
+            --query "tasks[0].taskArn" \
+            --output text)
+
+          echo "task_arn=$TASK_ARN" >> $GITHUB_OUTPUT
+
+      - name: Wait for schema task
+        run: |
+          aws ecs wait tasks-stopped \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --tasks "${{ steps.schema.outputs.task_arn }}"
+
+      - name: Verify schema task succeeded
+        run: |
+          EXIT_CODE=$(aws ecs describe-tasks \
+            --cluster ${{ vars.ECS_CLUSTER }} \
+            --tasks "${{ steps.schema.outputs.task_arn }}" \
+            --query "tasks[0].containers[0].exitCode" \
+            --output text)
+
+          echo "Schema task exit code: $EXIT_CODE"
+
+          if [ "$EXIT_CODE" != "0" ]; then
+            echo "Schema initialization failed."
+            exit 1
+          fi
