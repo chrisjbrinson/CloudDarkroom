@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 s3 = boto3.client("s3")
 
-app.logger.info("CloudDarkroom is starting")
+app.logger.info("CloudDarkroom is starting!!")
 
 
 @app.route("/")
