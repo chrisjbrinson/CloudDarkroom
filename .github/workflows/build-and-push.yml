@@ -79,7 +79,7 @@ jobs:
             --cluster ${{ vars.ECS_CLUSTER }} \
             --launch-type FARGATE \
             --task-definition "${{ steps.taskdef.outputs.task_definition }}" \
-            --network-configuration "awsvpcConfiguration={subnets=[${{ vars.ECS_SUBNETS }}],securityGroups=[${{ vars.ECS_SECURITY_GROUP }}],assignPublicIp=DISABLED}" \
+            --network-configuration "awsvpcConfiguration={subnets=[${{ vars.ECS_SUBNETS }}],securityGroups=[${{ vars.ECS_SECURITY_GROUP }}],assignPublicIp=ENABLED}" \
             --overrides '{
               "containerOverrides": [
                 {
