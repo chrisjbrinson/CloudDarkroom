@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "lambda/**"
+      - "common/**"
       - ".github/workflows/deploy-lambda.yml"
 
 permissions:
@@ -54,6 +55,7 @@ jobs:
             -t package
 
           cp handler.py package/
+          cp -r ../common package/common
 
           cd package
           zip -r ../package.zip .
