@@ -90,6 +90,16 @@ data "aws_iam_policy_document" "github_actions" {
       "arn:aws:lambda:us-east-1:875852488827:function:${var.project_name}-${var.environment}"
     ]
   }
+  statement {
+    actions = [
+      "iam:PassRole"
+    ]
+
+    resources = [
+      "arn:aws:iam::875852488827:role/clouddarkroom-dev-ecs-task",
+      "arn:aws:iam::875852488827:role/clouddarkroom-dev-ecs-task-execution"
+    ]
+  }
 }
 
 resource "aws_iam_policy" "github_actions" {
