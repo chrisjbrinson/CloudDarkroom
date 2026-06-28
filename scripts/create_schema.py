@@ -12,8 +12,9 @@ def main():
     ) as conn:
         with conn.cursor() as cur:
             cur.execute("""
+                DROP TABLE IF EXISTS images;
                 CREATE TABLE IF NOT EXISTS images (
-                    id UUID PRIMARY KEY,
+                    id BIGSERIAL PRIMARY KEY,
                     original_filename TEXT NOT NULL,
                     original_bucket TEXT NOT NULL,
                     original_key TEXT NOT NULL,

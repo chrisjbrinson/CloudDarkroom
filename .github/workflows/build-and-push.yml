@@ -99,8 +99,17 @@ jobs:
             --cluster ${{ vars.ECS_CLUSTER }} \
             --tasks "${{ steps.schema.outputs.task_arn }}"
 
-      - name: Describe schema task
+      - name: Verify schema task succeeded
         run: |
-          aws ecs describe-tasks \
+          EXIT_CODE=$(aws ecs describe-tasks \
             --cluster ${{ vars.ECS_CLUSTER }} \
-            --tasks "${{ steps.schema.outputs.task_arn }}"
+            --tasks "${{ steps.schema.outputs.task_arn }}" \
+            --query "tasks[0].containers[0].exitCode" \
+            --output text)
+
+          echo "Schema task exit code: $EXIT_CODE"
+
+          if [ "$EXIT_CODE" != "0" ]; then
+            echo "Schema initialization failed."
+            exit 1
+          fi
