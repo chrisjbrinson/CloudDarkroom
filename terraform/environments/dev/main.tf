@@ -5,6 +5,7 @@ module "network" {
   environment  = var.environment
 
   vpc_cidr = var.vpc_cidr
+  aws_region   = var.aws_region
 
   public_subnet_a_cidr = var.public_subnet_a_cidr
   availability_zone_a  = var.availability_zone_a

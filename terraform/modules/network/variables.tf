@@ -44,3 +44,7 @@ variable "availability_zone_b" {
   description = "Availability Zone for subnet B"
   type        = string
 }
+
+variable "aws_region" {
+  type = string
+}
