@@ -27,11 +27,13 @@ def lambda_handler(event, context):
     logger.info(f"Source bucket: {source_bucket}")
     logger.info(f"Object key: {key}")
 
+    logger.info("Downloading image from S3...")
     # Download the uploaded image
     response = s3.get_object(
         Bucket=upload_bucket,
         Key=key
     )
+    logger.info("Reading image bytes...")
 
     image_bytes = response["Body"].read()
 

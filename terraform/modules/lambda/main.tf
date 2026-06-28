@@ -67,6 +67,7 @@ resource "aws_lambda_function" "this" {
   role    = aws_iam_role.lambda.arn
   handler = "handler.lambda_handler"
   runtime = "python3.13"
+  timeout = 30
   environment {
      variables = {
        UPLOAD_BUCKET_NAME    = var.upload_bucket_name
