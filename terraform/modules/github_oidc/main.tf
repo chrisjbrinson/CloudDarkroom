@@ -48,7 +48,16 @@ data "aws_iam_policy_document" "github_actions" {
 
     resources = ["*"]
   }
+  statement {
+    actions = [
+      "ecs:RunTask",
+      "ecs:DescribeTasks"
+    ]
 
+    resources = [
+      "*"
+    ]
+  }
   statement {
     actions = [
       "ecr:BatchCheckLayerAvailability",

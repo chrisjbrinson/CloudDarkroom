@@ -13,7 +13,7 @@ s3 = boto3.client("s3")
 
 
 def lambda_handler(event, context):
-    logger.info("Lambda deployment test")
+    logger.info("Lambda deployment test!!")
     upload_bucket = os.environ["UPLOAD_BUCKET_NAME"]
     processed_bucket = os.environ["PROCESSED_BUCKET_NAME"]
 
