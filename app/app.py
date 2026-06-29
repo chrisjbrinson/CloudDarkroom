@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, flash, get_flashed_messages
 import logging
 import os
 import boto3
@@ -8,9 +8,11 @@ from common.db import get_connection
 logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
+app.secret_key = "supersecret"
 s3 = boto3.client("s3")
 
 app.logger.info("CloudDarkroom is starting!!!")
+
 
 
 @app.route("/")
@@ -18,21 +20,44 @@ def home():
     upload_bucket = os.environ.get("UPLOAD_BUCKET_NAME", "not set")
     processed_bucket = os.environ.get("PROCESSED_BUCKET_NAME", "not set")
 
+    messages = get_flashed_messages()
+
+    message_html = ""
+
+    if messages:
+        message_html = f"""
+        <div style="
+            background:#d4edda;
+            color:#155724;
+            border:1px solid #c3e6cb;
+            padding:10px;
+            margin-bottom:20px;
+            border-radius:5px;
+        ">
+            ✅ {messages[0]}
+        </div>
+        """
+
     return f"""
+    {message_html}
+
     <h1>CloudDarkroom</h1>
+
     <p><strong>Upload Bucket:</strong> {upload_bucket}</p>
     <p><strong>Processed Bucket:</strong> {processed_bucket}</p>
+
     <h2>Upload Image</h2>
+
     <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="image">
         <button type="submit">Upload</button>
     </form>
 
     <br>
+
     <form action="/images" method="get">
         <button type="submit">View Image Metadata</button>
     </form>
-
     """
 
 @app.route("/upload", methods=["POST"])
@@ -49,6 +74,7 @@ def upload():
         key
     )
     app.logger.info(f"Finished upload: {file.filename}")
+    flash(f"Successfully uploaded {file.filename}")
     return redirect(url_for("home"))
 
 
