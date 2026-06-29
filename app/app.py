@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, redirect, url_for
 import logging
 import os
 import boto3
@@ -49,7 +49,7 @@ def upload():
         key
     )
     app.logger.info(f"Finished upload: {file.filename}")
-    return f"Uploaded {key} to {bucket}"
+    return redirect(url_for("home"))
 
 
 
