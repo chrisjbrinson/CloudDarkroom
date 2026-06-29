@@ -22,11 +22,17 @@ def home():
     <h1>CloudDarkroom</h1>
     <p><strong>Upload Bucket:</strong> {upload_bucket}</p>
     <p><strong>Processed Bucket:</strong> {processed_bucket}</p>
-
+    <h2>Upload Image</h2>
     <form action="/upload" method="post" enctype="multipart/form-data">
         <input type="file" name="image">
         <button type="submit">Upload</button>
     </form>
+
+    <br>
+    <form action="/images" method="get">
+        <buttom type="submit">View Image Metadata</buttom>
+    </form>
+
     """
 
 @app.route("/upload", methods=["POST"])
