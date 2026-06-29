@@ -41,9 +41,9 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * ~~PostgreSQL database for image metadata~~
 * ~~Image uploads to S3~~
 * ~~Lambda-based image processing~~
-* User authentication and galleries
 * CloudFront CDN
 * Monitoring and observability
+* Upload to instagram
 
 
 
