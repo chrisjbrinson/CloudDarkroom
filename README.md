@@ -33,6 +33,8 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * GitHub Actions
 * Python
 * Flask
+* AWS Lambda
+* RDS PostgreSQL DB
 
 ## Next Steps
 
