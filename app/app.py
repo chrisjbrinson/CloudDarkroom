@@ -30,7 +30,7 @@ def home():
 
     <br>
     <form action="/images" method="get">
-        <buttom type="submit">View Image Metadata</buttom>
+        <button type="submit">View Image Metadata</button>
     </form>
 
     """
