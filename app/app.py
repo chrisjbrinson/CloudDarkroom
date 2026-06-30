@@ -1,6 +1,4 @@
-from ddtrace import patch_all
 
-patch_all()
 
 from flask import Flask, request, redirect, url_for, flash, get_flashed_messages
 import logging
