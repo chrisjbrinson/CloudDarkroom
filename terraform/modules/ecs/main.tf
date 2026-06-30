@@ -205,7 +205,7 @@ resource "aws_ecs_task_definition" "this" {
         },
         {
           name  = "DD_SITE"
-          value = "datadoghq.com"
+          value = "us5.datadoghq.com"
         },
         {
           name  = "DD_APM_ENABLED"

@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "supersecret"
 s3 = boto3.client("s3")
 
-app.logger.info("CloudDarkroom is starting!!!!")
+app.logger.info("CloudDarkroom is starting!!!")
 
 
 
