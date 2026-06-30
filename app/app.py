@@ -1,17 +1,10 @@
-import os
-
-from ddtrace import patch_all, tracer
-from ddtrace.config import flask
+from ddtrace import patch_all
 
 patch_all()
 
-tracer.configure(
-    hostname=os.environ.get("DD_AGENT_HOST", "127.0.0.1"),
-    port=int(os.environ.get("DD_TRACE_AGENT_PORT", "8126")),
-)
-
 from flask import Flask, request, redirect, url_for, flash, get_flashed_messages
 import logging
+import os
 import boto3
 import uuid
 from common.db import get_connection
