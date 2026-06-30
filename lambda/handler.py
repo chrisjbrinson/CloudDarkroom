@@ -1,3 +1,4 @@
+from datadog_lambda.wrapper import datadog_lambda_wrapper
 import logging
 import os
 from io import BytesIO
@@ -116,3 +117,5 @@ def lambda_handler(event, context):
         "statusCode": 200,
         "body": "Image processed successfully"
     }
+
+lambda_handler = datadog_lambda_wrapper(lambda_handler)

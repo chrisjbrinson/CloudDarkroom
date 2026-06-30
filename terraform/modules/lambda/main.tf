@@ -1,3 +1,7 @@
+data "aws_secretsmanager_secret" "datadog_api_key" {
+  name = "clouddarkroom/datadog/api-key"
+}
+
 data "aws_iam_policy_document" "s3" {
   statement {
     actions = [
@@ -60,6 +64,27 @@ resource "aws_iam_role_policy_attachment" "vpc_access" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
+resource "aws_iam_role_policy" "datadog_secret" {
+  name = "${var.project_name}-${var.environment}-lambda-datadog-secret"
+
+  role = aws_iam_role.lambda.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+
+        Resource = data.aws_secretsmanager_secret.datadog_api_key.arn
+      }
+    ]
+  })
+}
 
 resource "aws_lambda_function" "this" {
   function_name = "${var.project_name}-${var.environment}"
@@ -68,6 +93,12 @@ resource "aws_lambda_function" "this" {
   handler = "handler.lambda_handler"
   runtime = "python3.13"
   timeout = 30
+
+  layers = [
+    "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Python313:125",
+    "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Extension:96"
+  ]
+
   environment {
      variables = {
        UPLOAD_BUCKET_NAME    = var.upload_bucket_name
@@ -76,6 +107,10 @@ resource "aws_lambda_function" "this" {
        DB_NAME = var.db_name
        DB_USER = var.db_user
        DB_PASSWORD = var.db_password
+       DD_SITE = "us5.datadoghq.com"
+       DD_SERVICE = "clouddarkroom-lambda"
+       DD_ENV = var.environment
+       DD_API_KEY_SECRET_ARN    = data.aws_secretsmanager_secret.datadog_api_key.arn
 
     }
   }
