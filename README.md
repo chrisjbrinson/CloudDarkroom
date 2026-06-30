@@ -22,6 +22,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * Image upload to S3
 * Lambda based image processing
 * PostgreSQL database for image metadata
+* Datadog for observability
 
 ## Technology Stack
 
@@ -44,7 +45,7 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * ~~Image uploads to S3~~
 * ~~Lambda-based image processing~~
 * CloudFront CDN
-* Monitoring and observability
+* ~~Datadog for observability~~
 * Upload to instagram
 
 
