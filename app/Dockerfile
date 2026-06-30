@@ -12,4 +12,4 @@ COPY scripts ./scripts
 
 EXPOSE 5001
 
-CMD ["ddtrace-run", "python", "app.py"]
+CMD ["python", "app.py"]
