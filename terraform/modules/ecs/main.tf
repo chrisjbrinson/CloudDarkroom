@@ -35,6 +35,32 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+data "aws_secretsmanager_secret" "datadog_api_key" {
+  name = "clouddarkroom/datadog/api-key"
+}
+
+resource "aws_iam_role_policy" "ecs_execution_secrets" {
+  name = "${var.project_name}-${var.environment}-ecs-execution-secrets"
+
+  role = aws_iam_role.ecs_task_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect = "Allow"
+
+        Action = [
+          "secretsmanager:GetSecretValue"
+        ]
+
+        Resource = data.aws_secretsmanager_secret.datadog_api_key.arn
+      }
+    ]
+  })
+}
+
 resource "aws_iam_role" "ecs_task" {
   name = "${var.project_name}-${var.environment}-ecs-task"
 
@@ -108,28 +134,44 @@ resource "aws_ecs_task_definition" "this" {
 
       environment = [
         {
-            name = "UPLOAD_BUCKET_NAME"
-            value = var.upload_bucket_name
+          name  = "UPLOAD_BUCKET_NAME"
+          value = var.upload_bucket_name
         },
         {
-            name = "PROCESSED_BUCKET_NAME"
-            value = var.processed_bucket_name
+          name  = "PROCESSED_BUCKET_NAME"
+          value = var.processed_bucket_name
         },
         {
-          name = "DB_HOST"
+          name  = "DB_HOST"
           value = var.db_host
         },
         {
-          name = "DB_NAME"
+          name  = "DB_NAME"
           value = var.db_name
         },
         {
-          name = "DB_USER"
+          name  = "DB_USER"
           value = var.db_user
         },
         {
-          name = "DB_PASSWORD"
+          name  = "DB_PASSWORD"
           value = var.db_password
+        },
+        {
+          name  = "DD_AGENT_HOST"
+          value = "127.0.0.1"
+        },
+        {
+          name  = "DD_TRACE_AGENT_PORT"
+          value = "8126"
+        },
+        {
+          name  = "DD_SERVICE"
+          value = "clouddarkroom"
+        },
+        {
+          name  = "DD_ENV"
+          value = var.environment
         }
       ]
 
@@ -139,13 +181,64 @@ resource "aws_ecs_task_definition" "this" {
           protocol      = "tcp"
         }
       ]
+
       logConfiguration = {
         logDriver = "awslogs"
 
-        options ={
-            awslogs-group = aws_cloudwatch_log_group.this.name
-            awslogs-region = var.aws_region
-            awslogs-stream-prefix = "ecs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "ecs"
+        }
+      }
+    },
+
+    {
+      name      = "datadog-agent"
+      image     = "public.ecr.aws/datadog/agent:latest"
+      essential = false
+
+      environment = [
+        {
+          name  = "ECS_FARGATE"
+          value = "true"
+        },
+        {
+          name  = "DD_SITE"
+          value = "datadoghq.com"
+        },
+        {
+          name  = "DD_APM_ENABLED"
+          value = "true"
+        }
+        ,
+        {
+          name  = "DD_LOGS_ENABLED"
+          value = "true"
+        }
+      ]
+
+      secrets = [
+        {
+          name      = "DD_API_KEY"
+          valueFrom = data.aws_secretsmanager_secret.datadog_api_key.arn
+        }
+      ]
+
+      portMappings = [
+        {
+          containerPort = 8126
+          protocol      = "tcp"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "datadog"
         }
       }
     }
