@@ -10,6 +10,6 @@ COPY app/app.py .
 COPY common ./common
 COPY scripts ./scripts
 
-EXPOSE 5000
+EXPOSE 5001
 
 CMD ["ddtrace-run", "python", "app.py"]
