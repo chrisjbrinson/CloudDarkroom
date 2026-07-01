@@ -90,7 +90,8 @@ resource "aws_lambda_function" "this" {
   function_name = "${var.project_name}-${var.environment}"
 
   role    = aws_iam_role.lambda.arn
-  handler = "handler.lambda_handler"
+  #handler = "handler.lambda_handler"
+  handler = "datadog_lambda.handler.handler"
   runtime = "python3.13"
   timeout = 30
 
@@ -111,6 +112,7 @@ resource "aws_lambda_function" "this" {
        DD_SERVICE = "clouddarkroom-lambda"
        DD_ENV = var.environment
        DD_API_KEY_SECRET_ARN    = data.aws_secretsmanager_secret.datadog_api_key.arn
+       DD_LAMBDA_HANDLER = "handler.lambda_handler"
 
     }
   }
