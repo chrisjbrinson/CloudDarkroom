@@ -1,6 +1,6 @@
-data "aws_secretsmanager_secret" "datadog_api_key" {
-  name = "clouddarkroom/datadog/api-key"
-}
+# data "aws_secretsmanager_secret" "datadog_api_key" {
+#   name = "clouddarkroom/datadog/api-key"
+# }
 
 data "aws_iam_policy_document" "s3" {
   statement {
@@ -64,41 +64,41 @@ resource "aws_iam_role_policy_attachment" "vpc_access" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }
 
-resource "aws_iam_role_policy" "datadog_secret" {
-  name = "${var.project_name}-${var.environment}-lambda-datadog-secret"
+# resource "aws_iam_role_policy" "datadog_secret" {
+#   name = "${var.project_name}-${var.environment}-lambda-datadog-secret"
 
-  role = aws_iam_role.lambda.id
+#   role = aws_iam_role.lambda.id
 
-  policy = jsonencode({
-    Version = "2012-10-17"
+#   policy = jsonencode({
+#     Version = "2012-10-17"
 
-    Statement = [
-      {
-        Effect = "Allow"
+#     Statement = [
+#       {
+#         Effect = "Allow"
 
-        Action = [
-          "secretsmanager:GetSecretValue"
-        ]
+#         Action = [
+#           "secretsmanager:GetSecretValue"
+#         ]
 
-        Resource = data.aws_secretsmanager_secret.datadog_api_key.arn
-      }
-    ]
-  })
-}
+#         Resource = data.aws_secretsmanager_secret.datadog_api_key.arn
+#       }
+#     ]
+#   })
+# }
 
 resource "aws_lambda_function" "this" {
   function_name = "${var.project_name}-${var.environment}"
 
   role    = aws_iam_role.lambda.arn
-  #handler = "handler.lambda_handler"
-  handler = "datadog_lambda.handler.handler"
+  handler = "handler.lambda_handler"
+  #handler = "datadog_lambda.handler.handler"
   runtime = "python3.13"
   timeout = 30
 
-  layers = [
-    "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Python313:125",
-    "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Extension:96"
-  ]
+#   layers = [
+#     "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Python313:125",
+#     "arn:aws:lambda:us-east-1:464622532012:layer:Datadog-Extension:96"
+#   ]
 
   environment {
      variables = {
@@ -108,20 +108,20 @@ resource "aws_lambda_function" "this" {
        DB_NAME = var.db_name
        DB_USER = var.db_user
        DB_PASSWORD = var.db_password
-       DD_SITE = "us5.datadoghq.com"
-       DD_SERVICE = "clouddarkroom-lambda"
-       DD_ENV = var.environment
-       DD_API_KEY_SECRET_ARN    = data.aws_secretsmanager_secret.datadog_api_key.arn
-       DD_LAMBDA_HANDLER = "handler.lambda_handler"
+    #    DD_SITE = "us5.datadoghq.com"
+    #    DD_SERVICE = "clouddarkroom-lambda"
+    #    DD_ENV = var.environment
+    #    DD_API_KEY_SECRET_ARN    = data.aws_secretsmanager_secret.datadog_api_key.arn
+    #    DD_LAMBDA_HANDLER = "handler.lambda_handler"
 
     }
   }
-  #vpc_config {
-  #  subnet_ids = var.subnet_ids
-  #  security_group_ids = [
-  #      var.security_group_id
-  #  ]
-  #}
+  vpc_config {
+   subnet_ids = var.subnet_ids
+   security_group_ids = [
+       var.security_group_id
+   ]
+  }
 
   filename         = "${path.root}/../../../lambda/package.zip"
   source_code_hash = filebase64sha256("${path.root}/../../../lambda/package.zip")

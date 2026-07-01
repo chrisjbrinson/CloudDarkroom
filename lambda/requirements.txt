@@ -1,4 +1,4 @@
 Pillow==11.3.0
 psycopg[binary]
-ddtrace
-datadog-lambda
+# ddtrace
+# datadog-lambda

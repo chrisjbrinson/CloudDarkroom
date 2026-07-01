@@ -24,6 +24,10 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 * PostgreSQL database for image metadata
 * Datadog for observability
 
+## Datadog APM
+![Upload Page](screenshots/dd1.png)
+![Upload Page](screenshots/dd2.png)
+
 ## Technology Stack
 
 * AWS
