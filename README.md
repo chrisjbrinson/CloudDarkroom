@@ -28,6 +28,10 @@ The end goal is to upload an image, adjust resolution, add a watermark, store me
 ![Upload Page](screenshots/dd1.png)
 ![Upload Page](screenshots/dd2.png)
 
+## Architecture Map
+
+See [docs/architecture-map.md](docs/architecture-map.md) for visual diagrams of the runtime image flow, AWS infrastructure, and CI/CD wiring.
+
 ## Technology Stack
 
 * AWS
