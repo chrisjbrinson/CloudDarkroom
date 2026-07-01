@@ -116,12 +116,12 @@ resource "aws_lambda_function" "this" {
 
     }
   }
-  vpc_config {
-    subnet_ids = var.subnet_ids
-    security_group_ids = [
-        var.security_group_id
-    ]
-  }
+  #vpc_config {
+  #  subnet_ids = var.subnet_ids
+  #  security_group_ids = [
+  #      var.security_group_id
+  #  ]
+  #}
 
   filename         = "${path.root}/../../../lambda/package.zip"
   source_code_hash = filebase64sha256("${path.root}/../../../lambda/package.zip")

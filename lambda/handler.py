@@ -77,40 +77,41 @@ def lambda_handler(event, context):
     )
 
     logger.info(f"Uploaded processed image: {processed_key}")
-
+    
     # Store metadata in PostgreSQL
-    with get_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                """
-                INSERT INTO images (
-                    original_filename,
-                    original_bucket,
-                    original_key,
-                    processed_bucket,
-                    processed_key,
-                    status,
-                    width,
-                    height,
-                    processed_at
-                )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
-                """,
-                (
-                    os.path.basename(key),
-                    source_bucket,
-                    key,
-                    processed_bucket,
-                    processed_key,
-                    "processed",
-                    width,
-                    height,
-                ),
-            )
+    # with get_connection() as conn:
+    #     with conn.cursor() as cur:
+    #         cur.execute(
+    #             """
+    #             INSERT INTO images (
+    #                 original_filename,
+    #                 original_bucket,
+    #                 original_key,
+    #                 processed_bucket,
+    #                 processed_key,
+    #                 status,
+    #                 width,
+    #                 height,
+    #                 processed_at
+    #             )
+    #             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
+    #             """,
+    #             (
+    #                 os.path.basename(key),
+    #                 source_bucket,
+    #                 key,
+    #                 processed_bucket,
+    #                 processed_key,
+    #                 "processed",
+    #                 width,
+    #                 height,
+    #             ),
+    #         )
 
-        conn.commit()
-
-    logger.info("Inserted image metadata into PostgreSQL.")
+    #     conn.commit()
+        
+    #logger.info("Inserted image metadata into PostgreSQL.")
+    logger.info("Skipping postgres write for networking test")
 
     response = {
         "statuCode": 200,
