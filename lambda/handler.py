@@ -113,9 +113,14 @@ def lambda_handler(event, context):
 
     logger.info("Inserted image metadata into PostgreSQL.")
 
-    return {
-        "statusCode": 200,
+    response = {
+        "statuCode": 200,
         "body": "Image processed successfully"
     }
+
+    logger.info("About to return from labmda_handler")
+
+    return response
+    
 
 lambda_handler = datadog_lambda_wrapper(lambda_handler)
